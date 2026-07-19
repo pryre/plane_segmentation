@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+
+from plane_segmentation_node.detection_server import DetectionServer
+
+import sys
+import rclpy
+
+if __name__ == '__main__':
+    rclpy.init(args=sys.argv[1:])
+
+    try:
+        server = DetectionServer()
+        rclpy.spin(server)
+    except KeyboardInterrupt:
+        pass
+
+    exit(0)
