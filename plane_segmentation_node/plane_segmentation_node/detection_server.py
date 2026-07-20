@@ -39,10 +39,10 @@ class DetectionServer(Node):
 
         # self._sub_depth = self.create_subscription(Image, "depth", self._cb_depth, 10)
         # self._sub_color = self.create_subscription(Image, "color", self._cb_color, 10)
-        self._pub_mask = self.create_publisher(Image, 'mask', 10)
-        self._pub_overlay = self.create_publisher(Image, 'overlay', 10)
-        self._pub_results = self.create_publisher(PlaneResults, "planes", 10)
-        self._pub_viz = self.create_publisher(MarkerArray, 'markers', 10)
+        self._pub_mask = self.create_publisher(Image, '~/mask', 10)
+        self._pub_overlay = self.create_publisher(Image, '~/overlay', 10)
+        self._pub_results = self.create_publisher(PlaneResults, "~/planes", 10)
+        self._pub_viz = self.create_publisher(MarkerArray, '/markers', 10)
 
         self._ts = TimeSynchronizer(
             [
@@ -116,8 +116,8 @@ class DetectionServer(Node):
 
     def detect(self, depth_info:CameraInfo, depth_msg:Image, color_info:CameraInfo, color_msg:Image):
         # -- Detect plane.
-        self.get_logger().info("=================================================")
-        self.get_logger().info("Start plane detection")
+        # self.get_logger().info("=================================================")
+        # self.get_logger().info("Start plane detection")
 
         depth = self._bridge.imgmsg_to_cv2(depth_msg)
         color = self._bridge.imgmsg_to_cv2(color_msg)
@@ -125,12 +125,12 @@ class DetectionServer(Node):
         # results:list[PlaneResult] = list()
         results, mask = detect_planes(depth_info, depth, color)
 
-        self.get_logger().info("Finish plane detection")
+        # self.get_logger().info("Finish plane detection")
         # # -- Print result.
         # for i, plane_param in enumerate(list_plane_params):
         #     plane_param.print_params(index=i+1)
 
-        self.get_logger().info("Handle results")
+        # self.get_logger().info("Handle results")
         header = depth_msg.header
         self.publish_results(header, results)
         self.publish_debug(color_msg.header, mask, color, results)

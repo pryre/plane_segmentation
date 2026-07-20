@@ -9,7 +9,9 @@ import cv2
 import matplotlib.pyplot as plt
 import copy
 
+
 from plane_segmentation_interfaces.msg import PlaneResult
+from geometry_msgs.msg import Vector3, Point
 
 from .utils.lib_io import read_yaml_file
 from .utils.lib_ransac import PlaneModel, RansacPlane
@@ -80,7 +82,12 @@ def subtract_points(points, indices_to_subtract):
 
 def detect_planes(info, depth, color) -> tuple[list[PlaneResult], np.ndarray]:
     gray = cv2.cvtColor(color, cv2.COLOR_BGR2GRAY)
-    return [], gray
+    return [PlaneResult(
+        normal=Vector3(x=0.0,y=0.0,z=1.0),
+        center=Point(x=0.0,y=0.0,z=10.0),
+        image_x=200,
+        image_y=200,
+        mask_color=0xFFFFFF)], gray
     '''
     Arguments:
         depth_img {np.ndarry, np.uint16}:
